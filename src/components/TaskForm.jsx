@@ -1,5 +1,9 @@
 import React from "react";
 import { useForm } from "react-hook-form";
+import CommonInput from "./common/commonInput";
+import CommonSelect from "./common/CommonSelect";
+import CommonButton from "./common/CommonButton";
+import CommonError from "./common/CommonError";
 
 export default function TaskForm() {
   const {
@@ -7,10 +11,9 @@ export default function TaskForm() {
     handleSubmit,
     formState: { errors },
   } = useForm({
-    defaultValues: {
-      status: "Pending",
-    },
+    defaultValues: { status: "Pending" },
   });
+
   const onSubmit = (data) => {
     console.log(data);
   };
@@ -18,86 +21,59 @@ export default function TaskForm() {
   return (
     <div className="max-w-md mx-auto mt-10 p-6 border rounded shadow">
       <h2 className="text-xl font-bold mb-4">Create Task</h2>
+
       <form onSubmit={handleSubmit(onSubmit)}>
-        <div className="mb-4">
-          <label className="block mb-1">Task Title</label>
-          <input
-            type="text"
-            {...register("title", { required: "Task Title is required" })}
-            className="w-full border p-2 rounded"
-          />
-          {errors.title && (
-            <p className="text-red-500">{errors.title.message}</p>
-          )}
-        </div>
+        <CommonInput
+          label="Task Title"
+          name="title"
+          register={register}
+          rules={{ required: "Task Title is required" }}
+          error={errors.title}
+        />
 
         <div className="mb-4">
-          <label className="block mb-1">Task Description</label>
+          <label className="block mb-1 font-medium">Task Description</label>
           <textarea
             {...register("description", {
               required: "Description is required",
-              minLength: {
-                value: 20,
-                message: "Minimum 20 characters required",
-              },
+              minLength: { value: 20, message: "Minimum 20 characters required" },
             })}
             className="w-full border p-2 rounded"
           />
-          {errors.description && (
-            <p className="text-red-500">{errors.description.message}</p>
-          )}
+          <CommonError error={errors.description} />
         </div>
 
-        <div className="mb-4">
-          <label className="block mb-1">Task Type</label>
-          <select
-            {...register("type", { required: "Task Type is required" })}
-            className="w-full border p-2 rounded"
-          >
-            <option value="">Select Type</option>
-            <option value="React">React</option>
-            <option value="Redux">Redux</option>
-            <option value="Hooks">Hooks</option>
-            <option value="API Integration">API Integration</option>
-          </select>
-          {errors.type && <p className="text-red-500">{errors.type.message}</p>}
-        </div>
+        <CommonSelect
+          label="Task Type"
+          name="type"
+          register={register}
+          options={["React", "Redux", "Hooks", "API Integration"]}
+          rules={{ required: "Task Type is required" }}
+          error={errors.type}
+        />
+
+        <CommonInput
+          label="Deadline"
+          type="date"
+          name="deadline"
+          register={register}
+        />
 
         <div className="mb-4">
-          <label className="block mb-1">DeadLine</label>
-          <input
-            type="date"
-            {...register("deadline")}
-            className="w-full border p-2 rounded"
-          />
-        </div>
-
-        <div className="mb-4">
-          <label className="block mb-1">Priority</label>
+          <label className="block mb-1 font-medium">Priority</label>
           <div className="flex gap-4">
-            <label>
-              <input type="radio" value="Low" {...register("priority")} />
-              Low
-            </label>
-            <label>
-              <input type="radio" value="Medium" {...register("priority")} />
-              Medium
-            </label>
-            <label>
-              <input type="radio" value="High" {...register("priority")} />
-              High
-            </label>
+            {["Low", "Medium", "High"].map((level) => (
+              <label key={level}>
+                <input type="radio" value={level} {...register("priority")} />
+                <span className="ml-1">{level}</span>
+              </label>
+            ))}
           </div>
         </div>
 
         <input type="hidden" {...register("status")} />
 
-        <button
-          type="submit"
-          className="bg-blue-500 text-white px-4 py-2 rounded"
-        >
-          Submit
-        </button>
+        <CommonButton label="Submit" />
       </form>
     </div>
   );
