@@ -7,10 +7,12 @@ import CommonSelect from "../common/CommonSelect";
 import CommonButton from "../common/CommonButton";
 import toast from "react-hot-toast";
 import { addTask } from "./taskSlice";
+import CommonTextArea from "../common/CommonTextArea";
+import CommonPriority from "../common/CommonPriority";
 import { useDispatch, useSelector } from "react-redux";
 export default function TaskForm() {
-  const dispatch=useDispatch()
-  const {editTask}=useSelector((state)=>state.tasks)
+  const dispatch = useDispatch();
+  const { editTask } = useSelector((state) => state.tasks);
   const {
     register,
     control,
@@ -26,12 +28,12 @@ export default function TaskForm() {
   const { fields, append, remove } = useFieldArray({ control, name: "tags" });
   const selectedType = watch("type");
 
-  if(editTask&& !watch("title")){
-    Object.keys(editTask).forEach((key)=>setValue(key,editTask[key]))
+  if (editTask && !watch("title")) {
+    Object.keys(editTask).forEach((key) => setValue(key, editTask[key]));
   }
 
   const onSubmit = async (data) => {
-   try {
+    try {
       if (editTask) {
         dispatch(updateTask({ id: editTask.id, updatedData: data }));
         toast.success("Task updated successfully!");
@@ -55,7 +57,7 @@ export default function TaskForm() {
       <div className="w-full max-w-2xl bg-white/60 backdrop-blur-2xl rounded-3xl shadow-2xl border border-white/40 p-10 transition-transform duration-300 hover:scale-[1.01] hover:shadow-indigo-200">
         {/* Title */}
         <h2 className="text-3xl font-extrabold mb-8 text-center bg-black bg-clip-text text-transparent tracking-tight drop-shadow-sm">
-        Manage Tasks using Redux Toolkit 
+          Manage Tasks using Redux Toolkit
         </h2>
 
         <form onSubmit={handleSubmit(onSubmit, onError)} className="space-y-8">
@@ -71,26 +73,13 @@ export default function TaskForm() {
           </div>
 
           {/* Description */}
-          <div>
-            <label className="block font-semibold text-black mb-2">
-              Description
-              <span className="text-red-500 ml-1">*</span>
-            </label>
-            <textarea
-              {...register("description")}
-              placeholder="Enter description (Min 20 characters)"
-              className="w-full rounded-2xl border border-gray-200 bg-white/70 backdrop-blur-sm px-4 py-3 text-gray-800 
-focus:outline-none focus:ring-4 focus:ring-indigo-200 focus:border-indigo-500 
-placeholder:text-gray-400 shadow-[0_2px_6px_rgba(0,0,0,0.05)] transition-all duration-300 ease-in-out 
-hover:border-indigo-300 hover:shadow-[0_3px_8px_rgba(99,102,241,0.15)] resize-none"
-              rows={3}
-            />
-            {errors.description && (
-              <p className="text-red-500 text-sm">
-                {errors.description.message}
-              </p>
-            )}
-          </div>
+          <CommonTextArea
+            label="Description"
+            name="description"
+            placeholder="Enter description (Min 20 characters)"
+            register={register}
+            errors={errors}
+          />
 
           {/* Type */}
           <CommonSelect
@@ -126,35 +115,12 @@ hover:border-indigo-300 hover:shadow-[0_3px_8px_rgba(99,102,241,0.15)] resize-no
           </div>
 
           {/* Priority */}
-          <div>
-            <label className="block font-semibold text-black mb-2">
-              Priority
-              <span className="text-red-500 ml-1">*</span>
-            </label>
-            <div className="flex gap-4 mt-3">
-              {["Low", "Medium", "High"].map((level) => (
-                <label
-                  key={level}
-                  className={`flex items-center justify-center gap-2 px-5 py-2.5 rounded-2xl border 
-text-sm font-medium transition-all duration-300 ease-in-out cursor-pointer select-none 
-shadow-sm hover:shadow-md backdrop-blur-sm
-${
-  level === "High"
-    ? "border-gray-300 bg-gradient-to-r from-rose-50 to-rose-100 hover:from-rose-100 hover:to-rose-200 focus:ring-2 focus:ring-rose-300 focus:border-rose-400"
-    : level === "Medium"
-    ? "border-gray-300 bg-gradient-to-r from-amber-50 to-amber-100 hover:from-amber-100 hover:to-amber-200 focus:ring-2 focus:ring-amber-300 focus:border-amber-400"
-    : "border-gray-300 bg-gradient-to-r from-emerald-50 to-emerald-100 hover:from-emerald-100 hover:to-emerald-200 focus:ring-2 focus:ring-emerald-300 focus:border-emerald-400"
-}`}
-                >
-                  <input type="radio" value={level} {...register("priority")} />
-                  <span className="font-medium">{level}</span>
-                </label>
-              ))}
-            </div>
-            {errors.priority && (
-              <p className="text-red-500 text-sm">{errors.priority.message}</p>
-            )}
-          </div>
+          <CommonPriority
+            label="Priority"
+            name="priority"
+            register={register}
+            errors={errors}
+          />
 
           {/* Email */}
           <div>
