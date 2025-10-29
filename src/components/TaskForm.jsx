@@ -54,10 +54,9 @@ export default function TaskForm() {
               name="title"
               placeholder="Enter task title"
               register={register}
+              errors={errors}
             />
-            {errors.title && (
-              <p className="text-red-500 text-sm">{errors.title.message}</p>
-            )}
+            
           </div>
 
           {/* Description */}
@@ -88,10 +87,8 @@ hover:border-indigo-300 hover:shadow-[0_3px_8px_rgba(99,102,241,0.15)] resize-no
             name="type"
             register={register}
             options={["API Integration", "Frontend Task", "Backend Task"]}
+            errors={errors}
           />
-          {errors.type && (
-            <p className="text-red-500 text-sm">{errors.type.message}</p>
-          )}
 
           {/* API Endpoint */}
           {selectedType === "API Integration" && (
@@ -101,6 +98,7 @@ hover:border-indigo-300 hover:shadow-[0_3px_8px_rgba(99,102,241,0.15)] resize-no
                 name="apiEndpoint"
                 placeholder="https://example.com/api"
                 register={register}
+                errors={errors}
               />
             </div>
           )}
@@ -112,10 +110,8 @@ hover:border-indigo-300 hover:shadow-[0_3px_8px_rgba(99,102,241,0.15)] resize-no
               type="date"
               name="deadline"
               register={register}
+              errors={errors}
             />
-            {errors.deadline && (
-              <p className="text-red-500 text-sm">{errors.deadline.message}</p>
-            )}
           </div>
 
           {/* Priority */}
@@ -157,10 +153,8 @@ ${
               name="email"
               placeholder="example@email.com"
               register={register}
+              errors={errors}
             />
-            {errors.email && (
-              <p className="text-red-500 text-sm">{errors.email.message}</p>
-            )}
           </div>
 
           {/* Submit */}

@@ -6,8 +6,9 @@ export default function CommonInput({
   register,
   name,
   placeholder,
-  error,
+  errors={},
 }) {
+  const fieldError = errors?.[name]; 
   return (
     <div>
       <label className="block font-medium ">
@@ -23,8 +24,13 @@ shadow-[0_2px_6px_rgba(0,0,0,0.05)] placeholder:text-gray-400
 focus:outline-none focus:ring-4 focus:ring-indigo-200 focus:border-indigo-500 
 transition-all duration-300 ease-in-out hover:border-indigo-300 hover:shadow-[0_3px_8px_rgba(99,102,241,0.15)]"
 
-
+ 
       />
+       {fieldError && (
+        <p className="text-red-500 text-sm mt-1">
+          {fieldError.message}
+        </p>
+      )}
     </div>
   );
 }
