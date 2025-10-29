@@ -1,12 +1,16 @@
 import React from "react";
 import { useForm, useFieldArray } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
-import { formSchema } from "../Validations/FormSchema";
-import CommonInput from "./common/CommonInput";
-import CommonSelect from "./common/CommonSelect";
-import CommonButton from "./common/CommonButton";
+import { formSchema } from "../../Validations/FormSchema";
+import CommonInput from "../common/CommonInput";
+import CommonSelect from "../common/CommonSelect";
+import CommonButton from "../common/CommonButton";
 import toast from "react-hot-toast";
+import { addTask } from "./taskSlice";
+import { useDispatch, useSelector } from "react-redux";
 export default function TaskForm() {
+  const dispatch=useDispatch()
+  const {editTask}=useSelector((state)=>state.tasks)
   const {
     register,
     control,
@@ -22,14 +26,22 @@ export default function TaskForm() {
   const { fields, append, remove } = useFieldArray({ control, name: "tags" });
   const selectedType = watch("type");
 
+  if(editTask&& !watch("title")){
+    Object.keys(editTask).forEach((key)=>setValue(key,editTask[key]))
+  }
+
   const onSubmit = async (data) => {
-    try {
-      console.log("Form Data:", data);
-      await new Promise((res) => setTimeout(res, 800));
-      toast.success("Task submitted successfully!");
+   try {
+      if (editTask) {
+        dispatch(updateTask({ id: editTask.id, updatedData: data }));
+        toast.success("Task updated successfully!");
+      } else {
+        dispatch(addTask(data));
+        toast.success("Task added successfully!");
+      }
       reset();
     } catch (error) {
-      toast.error("Something went wrong.Please try again!");
+      toast.error("Something went wrong. Please try again!");
     }
   };
 
@@ -42,8 +54,8 @@ export default function TaskForm() {
     <div className="min-h-screen flex items-center justify-center bg-[linear-gradient(135deg,#e0e7ff,#cffafe)] py-10 px-4">
       <div className="w-full max-w-2xl bg-white/60 backdrop-blur-2xl rounded-3xl shadow-2xl border border-white/40 p-10 transition-transform duration-300 hover:scale-[1.01] hover:shadow-indigo-200">
         {/* Title */}
-        <h2 className="text-4xl font-extrabold mb-8 text-center bg-black bg-clip-text text-transparent tracking-tight drop-shadow-sm">
-          Task Information Form
+        <h2 className="text-3xl font-extrabold mb-8 text-center bg-black bg-clip-text text-transparent tracking-tight drop-shadow-sm">
+        Manage Tasks using Redux Toolkit 
         </h2>
 
         <form onSubmit={handleSubmit(onSubmit, onError)} className="space-y-8">
@@ -56,7 +68,6 @@ export default function TaskForm() {
               register={register}
               errors={errors}
             />
-            
           </div>
 
           {/* Description */}
