@@ -5,7 +5,7 @@ export default function CommonSelect({
   name,
   register,
   options,
-  error,
+  errors,
 }) {
   return (
     <div>
@@ -27,7 +27,11 @@ transition-all duration-300 ease-in-out hover:border-indigo-300 hover:shadow-[0_
             {opt}
           </option>
         ))}
+
       </select>
+        {errors[name] && (
+        <p className="text-red-500 text-sm">{errors[name]?.message}</p>
+      )}
     </div>
   );
 }

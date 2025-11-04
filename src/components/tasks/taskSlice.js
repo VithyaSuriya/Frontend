@@ -1,4 +1,3 @@
-// src/components/tasks/taskSlice.js
 import { createSlice } from "@reduxjs/toolkit";
 import { fetchTasks } from "./taskThunks";
 
@@ -9,6 +8,7 @@ const taskSlice = createSlice({
     loading: false,
     error: null,
     editingTask: null,
+    userField: "",
   },
   reducers: {
     addTask: (state, action) => {
@@ -22,14 +22,17 @@ const taskSlice = createSlice({
       state.editingTask = action.payload;
     },
     updateTask: (state, action) => {
-      const { id, title, description } = action.payload;
+      const { id, updatedData } = action.payload;
       const existingTask = state.list.find((task) => task.id === id);
       if (existingTask) {
-        existingTask.title = title;
-        existingTask.description = description;
+        Object.assign(existingTask, updatedData);
       }
     },
+    setUserField: (state, action) => {
+      state.userField = action.payload;
+    },
   },
+
   extraReducers: (builder) => {
     builder
       .addCase(fetchTasks.pending, (state) => {
@@ -47,6 +50,6 @@ const taskSlice = createSlice({
   },
 });
 
-export const { addTask, deleteTask, updateTask, setEditingTask } =
+export const { addTask, deleteTask, updateTask, setEditingTask, setUserField } =
   taskSlice.actions;
 export default taskSlice.reducer;

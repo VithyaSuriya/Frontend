@@ -9,7 +9,7 @@ export default function CommonPriority({ label, name, register, errors }) {
         {label}
         <span className="text-red-500 ml-1">*</span>
       </label>
-      <div className="flex gap-4 mt-3">
+      <div className="flex flex-wrap gap-4 mt-3">
         {levels.map((level) => (
           <label
             key={level}

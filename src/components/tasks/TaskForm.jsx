@@ -10,6 +10,7 @@ import { addTask } from "./taskSlice";
 import CommonTextArea from "../common/CommonTextArea";
 import CommonPriority from "../common/CommonPriority";
 import { useDispatch, useSelector } from "react-redux";
+import CommonDynamicField from "../common/CommonDynamicField";
 export default function TaskForm() {
   const dispatch = useDispatch();
   const { editTask } = useSelector((state) => state.tasks);
@@ -102,6 +103,17 @@ export default function TaskForm() {
               />
             </div>
           )}
+          {/* Dynamic User Fields */}
+          {["Frontend Task", "Backend Task"].includes(selectedType) && (
+            <CommonDynamicField
+              fields={fields}
+              append={append}
+              remove={remove}
+              register={register}
+              errors={errors}
+              selectedType={selectedType}
+            />
+          )}
 
           {/* Deadline */}
           <div>
@@ -113,6 +125,7 @@ export default function TaskForm() {
               errors={errors}
             />
           </div>
+          
 
           {/* Priority */}
           <CommonPriority

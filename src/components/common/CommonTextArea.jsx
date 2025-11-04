@@ -1,6 +1,13 @@
 import React from "react";
 
-export default function CommonTextArea({ label, name, register, errors, placeholder, rows = 3 }) {
+export default function CommonTextArea({
+  label,
+  name,
+  register,
+  errors,
+  placeholder,
+  rows = 3,
+}) {
   return (
     <div>
       <label className="block font-semibold text-black mb-2">
